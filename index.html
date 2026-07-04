@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lincoln — HR & Operations Executive | Football Intelligence | Deen & Growth</title>
+<meta name="description" content="Premium cosmic portfolio of Lincoln — HR & Operations Executive, aspiring MSc student in Germany, football analytics and knowledge enthusiast.">
+<meta name="theme-color" content="#0A0A16">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ COSMIC BACKGROUND ============ -->
+<canvas id="galaxy" aria-hidden="true"></canvas>
+<canvas id="trail" aria-hidden="true"></canvas>
+<div class="bg-fog" aria-hidden="true"></div>
+<div class="blob blob-a" aria-hidden="true"></div>
+<div class="blob blob-b" aria-hidden="true"></div>
+<div class="blob blob-c" aria-hidden="true"></div>
+<div class="cursor-spotlight" id="spotlight" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner glass">
+    <a href="#home" class="nav-logo">L<span class="dot">.</span></a>
+    <button class="sound-toggle" id="soundToggle" aria-pressed="false" aria-label="Toggle ambient sound">
+      <i data-lucide="volume-x" id="soundIcon"></i>
+    </button>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#education">Education</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#sports">Sports HUD</a></li>
+      <li><a href="#global">Global</a></li>
+      <li><a href="#deen">Deen</a></li>
+      <li><a href="#entertainment">Screen Time</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ 1. HERO ============ -->
+<section class="hero" id="home">
+  <div class="lens-flare" aria-hidden="true"></div>
+  <div class="hero-grid">
+    <div class="hero-text">
+      <span class="eyebrow" data-gsap="fade"><i data-lucide="rocket"></i> AVAILABLE FOR OPPORTUNITIES</span>
+      <h1 class="hero-name" id="heroName" aria-label="Lincoln">LINCOLN</h1>
+      <div class="hero-cycle" id="cycleText" aria-live="polite"></div>
+      <p class="hero-desc" data-gsap="fade">HR & Operations Executive building toward a fully-funded Master's in Germany — with a sharp, analytical eye for football tactics, markets, and knowledge.</p>
+      <div class="hero-ctas" data-gsap="fade">
+        <a href="#contact" class="btn btn-primary magnetic">Get in Touch</a>
+        <a href="#experience" class="btn btn-glass magnetic">View Journey</a>
+      </div>
+    </div>
+
+    <div class="hero-photo-wrap">
+      <div class="orbit-ring r1"></div>
+      <div class="orbit-ring r2"></div>
+      <div class="tilt-card" id="tiltCard">
+        <div class="tilt-inner glass">
+          <div class="hologram-sheen"></div>
+          <div class="photo-inner">L</div>
+          <div class="photo-badge">🇩🇪 Germany-bound</div>
+          <div class="tilt-shine"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">SCROLL<span>↓</span></div>
+</section>
+
+<!-- ============ 2. EDUCATION ============ -->
+<section class="section" id="education">
+  <div class="section-head" data-gsap="up">
+    <span class="tag-label"><i data-lucide="graduation-cap"></i> 01 — Intellectual Foundations</span>
+    <h2 class="kinetic-heading">Education</h2>
+    <p>Three academic milestones — each one a building block toward the next.</p>
+  </div>
+
+  <div class="edu-matrix">
+    <div class="edu-line" aria-hidden="true"></div>
+
+    <div class="edu-node flip-card" data-gsap="scale" tabindex="0">
+      <div class="flip-inner">
+        <div class="flip-front glass border-glow">
+          <span class="edu-step">SSC</span>
+          <h3>Chittagong City Corp. Model High School</h3>
+        </div>
+        <div class="flip-back glass">
+          <p><strong>Secondary School Certificate</strong></p>
+          <p>The foundation year — core sciences, mathematics, and language, sat under the Chittagong City Corporation education board.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="edu-node flip-card" data-gsap="scale" tabindex="0">
+      <div class="flip-inner">
+        <div class="flip-front glass border-glow">
+          <span class="edu-step">HSC</span>
+          <h3>Chittagong Collegiate College</h3>
+        </div>
+        <div class="flip-back glass">
+          <p><strong>Higher Secondary Certificate</strong></p>
+          <p>One of Chittagong's most reputed colleges — where analytical thinking and academic discipline were sharpened.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="edu-node flip-card" data-gsap="scale" tabindex="0">
+      <div class="flip-inner">
+        <div class="flip-front glass border-glow">
+          <span class="edu-step">BBA</span>
+          <h3>Int'l Islamic University Chittagong</h3>
+        </div>
+        <div class="flip-back glass">
+          <p><strong>Major: Human Resource Management</strong></p>
+          <p>Built a practical foundation in people management, organizational behavior, and business operations.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="edu-node flip-card edu-next" data-gsap="scale" tabindex="0">
+      <div class="flip-inner">
+        <div class="flip-front glass border-glow">
+          <span class="edu-step step-next">MSc</span>
+          <h3>Chemnitz University of Technology</h3>
+        </div>
+        <div class="flip-back glass">
+          <p><strong>Germany 🟢 In Progress</strong></p>
+          <p>Fully-funded Master's program — the next chapter, currently in visa and language preparation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. EXPERIENCE ============ -->
+<section class="section section-alt" id="experience">
+  <div class="section-head" data-gsap="up">
+    <span class="tag-label"><i data-lucide="briefcase"></i> 02 — Professional Orbit</span>
+    <h2 class="kinetic-heading">Experience</h2>
+    <p>Career progression in HR & Operations — click a node for the full detail.</p>
+  </div>
+
+  <div class="orbit-timeline">
+    <div class="orbit-spine" aria-hidden="true"></div>
+
+    <button class="orbit-card current" data-expand data-gsap="left">
+      <div class="orbit-marker"><span class="marker-pulse"></span></div>
+      <div class="orbit-main">
+        <span class="orbit-tag">CURRENT</span>
+        <h3>HR & Operations Executive</h3>
+        <p class="orbit-org">Metro Hospitality · Remote (US-based)</p>
+      </div>
+      <span class="expand-icon"><i data-lucide="plus"></i></span>
+      <div class="orbit-detail">
+        Leading HR coordination and day-to-day operations for a US-based hospitality management company — fully remote from Bangladesh. Responsibilities span employee onboarding, policy coordination, and cross-team operational support, balancing people processes with efficiency.
+      </div>
+    </button>
+
+    <button class="orbit-card" data-expand data-gsap="left">
+      <div class="orbit-marker"><span class="marker-pulse"></span></div>
+      <div class="orbit-main">
+        <span class="orbit-tag">PAST</span>
+        <h3>Executive Recruiter</h3>
+        <p class="orbit-org">Steadfast International</p>
+      </div>
+      <span class="expand-icon"><i data-lucide="plus"></i></span>
+      <div class="orbit-detail">
+        Managed full-cycle recruitment — sourcing, screening, interviewing, and closing candidates across multiple roles. Built a sharp, data-informed instinct for matching talent to business needs.
+      </div>
+    </button>
+
+    <button class="orbit-card" data-expand data-gsap="left">
+      <div class="orbit-marker"><span class="marker-pulse"></span></div>
+      <div class="orbit-main">
+        <span class="orbit-tag">INTERNSHIP</span>
+        <h3>HR Intern</h3>
+        <p class="orbit-org">Patenga Footwear Private Limited</p>
+      </div>
+      <span class="expand-icon"><i data-lucide="plus"></i></span>
+      <div class="orbit-detail">
+        First hands-on exposure to HR fundamentals — employee documentation, onboarding support, and daily operational coordination in a manufacturing environment.
+      </div>
+    </button>
+  </div>
+</section>
+
+<!-- ============ 4. SKILLS ============ -->
+<section class="section" id="skills">
+  <div class="section-head" data-gsap="up">
+    <span class="tag-label"><i data-lucide="brain-circuit"></i> 03 — Strategic Expertise</span>
+    <h2 class="kinetic-heading">Skills</h2>
+    <p>Core capability clusters — each one sharpened through real practice, not just theory.</p>
+  </div>
+
+  <div class="skill-categories">
+    <div class="skill-cat float-card border-glow" data-gsap="scale">
+      <span class="skill-cat-icon"><i data-lucide="trending-up"></i></span>
+      <h3>Growth</h3>
+      <p class="skill-desc">Strategy-first digital marketing — positioning, campaign structure, and growth thinking applied to real business goals.</p>
+      <div class="neon-tags">
+        <span class="neon-tag violet">Digital Marketing Strategy</span>
+        <span class="neon-tag violet">Campaign Positioning</span>
+      </div>
+    </div>
+
+    <div class="skill-cat float-card border-glow" data-gsap="scale" style="--delay:0.15s">
+      <span class="skill-cat-icon"><i data-lucide="coins"></i></span>
+      <h3>Global Commerce</h3>
+      <p class="skill-desc">Practical understanding of cryptocurrency markets and blockchain fundamentals — reading structure, not just price.</p>
+      <div class="neon-tags">
+        <span class="neon-tag pink">Cryptocurrency Markets</span>
+        <span class="neon-tag pink">Blockchain Fundamentals</span>
+      </div>
+    </div>
+
+    <div class="skill-cat float-card border-glow" data-gsap="scale" style="--delay:0.3s">
+      <span class="skill-cat-icon"><i data-lucide="languages"></i></span>
+      <h3>Linguistic</h3>
+      <p class="skill-desc">Building German fluency for life and study in Germany — structured, exam-driven progress.</p>
+      <div class="neon-tags">
+        <span class="neon-tag aqua">German — A1 Certified</span>
+        <span class="neon-tag aqua">A2 In Progress</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. SPORTS & ANALYTICS HUD ============ -->
+<section class="section section-alt" id="sports">
+  <div class="section-head" data-gsap="up">
+    <span class="tag-label"><i data-lucide="radar"></i> 04 — Sports & Analytics HUD</span>
+    <h2 class="kinetic-heading">On the Pitch, In the Data</h2>
+    <p>Two lenses on the same passion — deep analysis and active play.</p>
+  </div>
+
+  <div class="hud-grid">
+    <div class="hud-panel tactical border-glow" data-gsap="right">
+      <div class="hud-panel-head">
+        <span class="hud-dot violet"></span>
+        <span>TACTICAL ANALYTICS</span>
+      </div>
+      <h3>Football Intelligence</h3>
+      <p class="hud-desc">Deep-dive technical and tactical breakdowns of the Bundesliga — with absolute priority on <strong>FC Bayern München</strong>: pressing structure, build-up shape, and matchday adjustments.</p>
+      <div class="hud-readouts">
+        <div class="readout"><span class="readout-label">PRIORITY CLUB</span><span class="readout-val violet">FC Bayern 🔴</span></div>
+        <div class="readout"><span class="readout-label">LEAGUE FOCUS</span><span class="readout-val violet">Bundesliga</span></div>
+        <div class="readout"><span class="readout-label">LENS</span><span class="readout-val violet">Tactics + Data</span></div>
+        <div class="readout"><span class="readout-label">METHOD</span><span class="readout-val violet">Formations · Pressing · xG</span></div>
+      </div>
+    </div>
+
+    <div class="hud-panel active border-glow" data-gsap="left">
+      <div class="hud-panel-head">
+        <span class="hud-dot pink"></span>
+        <span>ACTIVE ATHLETICISM</span>
+      </div>
+      <h3>Played & Competed</h3>
+      <div class="active-grid">
+        <div class="active-tile"><i data-lucide="dribbble"></i>Cricket</div>
+        <div class="active-tile"><i data-lucide="circle-dot"></i>Football</div>
+        <div class="active-tile"><i data-lucide="badge"></i>Badminton</div>
+        <div class="active-tile glow-badge"><i data-lucide="gamepad-2"></i>eFootball</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. GLOBAL PANORAMA & TECH FUTURE ============ -->
+<section class="section" id="global">
+  <div class="section-head" data-gsap="up">
+    <span class="tag-label"><i data-lucide="globe"></i> 05 — Global Panorama & Tech Future</span>
+    <h2 class="kinetic-heading">Watching the Horizon</h2>
+    <p>Macro trends and emerging technology, tracked closely and critically.</p>
+  </div>
+
+  <div class="panorama-grid">
+    <div class="panorama-card border-glow" data-gsap="scale">
+      <span class="panorama-icon"><i data-lucide="globe-2"></i></span>
+      <h3>Macro Dynamics</h3>
+      <p class="panorama-desc">Following shifts in global power, alliances, and the political landscape of the Muslim world.</p>
+      <div class="neon-tags">
+        <span class="neon-tag violet"><span class="status-pulse"></span>Geopolitics</span>
+        <span class="neon-tag violet"><span class="status-pulse"></span>Islamic Politics</span>
+      </div>
+    </div>
+
+    <div class="panorama-card border-glow" data-gsap="scale" style="--delay:0.15s">
+      <span class="panorama-icon"><i data-lucide="cpu"></i></span>
+      <h3>Future Tech</h3>
+      <p class="panorama-desc">Tracking where AI, robotics, and computing are heading — and what it means for how we live and work.</p>
+      <div class="neon-tags">
+        <span class="neon-tag pink"><span class="status-pulse"></span>Advanced AI Systems</span>
+        <span class="neon-tag pink"><span class="status-pulse"></span>Autonomous Robotics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. DEEN & DISCURSIVE DEPTH ============ -->
+<section class="section deen-section" id="deen">
+  <div class="deen-pattern" aria-hidden="true"></div>
+  <div class="section-head" data-gsap="up">
+    <span class="tag-label deen-label"><i data-lucide="moon-star"></i> 06 — Deen & Discursive Depth</span>
+    <h2 class="kinetic-heading">Faith & Study</h2>
+    <p>A quiet space for reflection, learning, and spiritual discipline.</p>
+  </div>
+
+  <div class="deen-grid">
+    <div class="deen-card" data-gsap="fade">
+      <span class="deen-icon"><i data-lucide="moon-star"></i></span>
+      <h3>Islamic Views</h3>
+      <p>Personal philosophical reflections, ethics, and engagement with contemporary Islamic thought — approached with an evidence-based, source-grounded mindset.</p>
+    </div>
+
+    <div class="deen-card deen-station" data-gsap="fade" style="--delay:0.15s">
+      <span class="deen-icon"><i data-lucide="book-open"></i></span>
+      <h3>Deen Academy — Study Station</h3>
+      <p>A dedicated space for tracking learning across the Islamic sciences — building knowledge methodically over time.</p>
+      <div class="deen-tags">
+        <span class="deen-tag">Qur'an Study</span>
+        <span class="deen-tag">Hadith Research</span>
+        <span class="deen-tag">Islamic History</span>
+        <span class="deen-tag">Spiritual Discipline</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. ENTERTAINMENT ORBIT ============ -->
+<section class="section section-alt" id="entertainment">
+  <div class="section-head" data-gsap="up">
+    <span class="tag-label"><i data-lucide="clapperboard"></i> 07 — The Entertainment Orbit</span>
+    <h2 class="kinetic-heading">Screen Time</h2>
+    <p>Flip a card to see the take.</p>
+  </div>
+
+  <div class="ent-block">
+    <h3 class="ent-subhead"><i data-lucide="tv"></i> High-Stakes Series</h3>
+    <div class="ent-row">
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale">
+        <div class="flip-inner">
+          <div class="flip-front ent-front g1"><span class="ent-emoji">🐉</span><span class="ent-title">Game of Thrones</span></div>
+          <div class="flip-back ent-back glass"><span class="rating-pill violet">Epic Scale</span><p>Power, politics, and betrayal at their sharpest.</p></div>
+        </div>
+      </div>
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale">
+        <div class="flip-inner">
+          <div class="flip-front ent-front g2"><span class="ent-emoji">🔥</span><span class="ent-title">House of the Dragon</span></div>
+          <div class="flip-back ent-back glass"><span class="rating-pill pink">Dynasty Drama</span><p>The Targaryen fire, before the fall.</p></div>
+        </div>
+      </div>
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale">
+        <div class="flip-inner">
+          <div class="flip-front ent-front g3"><span class="ent-emoji">🚕</span><span class="ent-title">The Boys</span></div>
+          <div class="flip-back ent-back glass"><span class="rating-pill aqua">Dark Satire</span><p>Superheroes, unfiltered and brutal.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ent-block">
+    <h3 class="ent-subhead"><i data-lucide="film"></i> Masterclass Cinema</h3>
+    <div class="ent-row ent-row-wide">
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale"><div class="flip-inner"><div class="flip-front ent-front g4"><span class="ent-emoji">🔫</span><span class="ent-title">John Wick</span></div><div class="flip-back ent-back glass"><span class="rating-pill violet">Action Precision</span></div></div></div>
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale"><div class="flip-inner"><div class="flip-front ent-front g5"><span class="ent-emoji">🦇</span><span class="ent-title">The Dark Knight</span></div><div class="flip-back ent-back glass"><span class="rating-pill pink">Genre-Defining</span></div></div></div>
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale"><div class="flip-inner"><div class="flip-front ent-front g6"><span class="ent-emoji">🌀</span><span class="ent-title">Inception</span></div><div class="flip-back ent-back glass"><span class="rating-pill aqua">Mind-Bending</span></div></div></div>
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale"><div class="flip-inner"><div class="flip-front ent-front g7"><span class="ent-emoji">🐻</span><span class="ent-title">The Revenant</span></div><div class="flip-back ent-back glass"><span class="rating-pill violet">Raw Survival</span></div></div></div>
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale"><div class="flip-inner"><div class="flip-front ent-front g8"><span class="ent-emoji">💎</span><span class="ent-title">Blood Diamond</span></div><div class="flip-back ent-back glass"><span class="rating-pill pink">Hard-Hitting</span></div></div></div>
+      <div class="ent-card flip-card" tabindex="0" data-gsap="scale"><div class="flip-inner"><div class="flip-front ent-front g9"><span class="ent-emoji">🎭</span><span class="ent-title">Parasite</span></div><div class="flip-back ent-back glass"><span class="rating-pill aqua">Masterclass</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. CONTACT ============ -->
+<footer class="footer" id="contact">
+  <div class="footer-card glass border-glow" data-gsap="scale">
+    <span class="tag-label"><i data-lucide="satellite"></i> 08 — Matrix Connection</span>
+    <h2 class="kinetic-heading">Let's Connect</h2>
+    <p class="footer-sub">Open to opportunities, collaboration, or a good conversation about football, markets, or ideas.</p>
+
+    <button class="email-copy magnetic" id="emailCopy" data-email="hello@example.com">
+      <i data-lucide="mail"></i>
+      <span id="emailText">hello@example.com</span>
+      <span class="copy-hint" id="copyHint">Click to copy</span>
+    </button>
+
+    <div class="social-dock">
+      <a href="#" class="social-orb magnetic" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      </a>
+      <a href="#" class="social-orb magnetic" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>
+      </a>
+      <a href="#" class="social-orb magnetic" aria-label="X / Twitter">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.68L22.9 22h-6.9l-5.4-6.63L4.3 22H1.2l8.13-9.3L1 2h7.1l4.9 6.06L18.9 2zm-2.4 18h1.9L7.6 3.9H5.6L16.5 20z"/></svg>
+      </a>
+    </div>
+
+    <p class="footer-note">© 2026 Lincoln. Crafted with precision.</p>
+  </div>
+</footer>
+
+<!-- ============ CDN LIBRARIES ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
