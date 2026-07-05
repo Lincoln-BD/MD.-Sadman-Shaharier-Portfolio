@@ -1,12 +1,14 @@
 /* =========================================================
-   PORTFOLIO SCRIPT — Cosmic 3D build (Aurora Holographic)
+   PORTFOLIO SCRIPT — MD. Sadman Shaharier
    ========================================================= */
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hasHover = window.matchMedia('(hover: hover)').matches;
+const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
+let lenisInstance = null;
 
 /* =========================================================
-   1. THREE.JS COSMIC GALAXY BACKGROUND
+   1. THREE.JS COSMIC GALAXY BACKGROUND (perf-tuned)
    ========================================================= */
 function initGalaxy() {
   const canvas = document.getElementById('galaxy');
@@ -14,7 +16,7 @@ function initGalaxy() {
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
   } catch (e) {
     canvas.style.display = 'none';
     return;
@@ -24,10 +26,11 @@ function initGalaxy() {
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 60;
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  // Lower pixel ratio cap on small screens for smoother mobile performance
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmallScreen ? 1 : 1.5));
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  const starColors = [0x8B5CF6, 0xFF4FA3, 0x45E8C4, 0xC7C9E8];
+  const starColors = [0x8670F0, 0xF55FA6, 0x4DE0C0, 0xCBCDEC];
   const starGroups = [];
 
   function buildStarLayer(count, spread, size, colorHex) {
@@ -48,11 +51,12 @@ function initGalaxy() {
     return points;
   }
 
-  const isSmall = window.innerWidth < 768;
-  starGroups.push(buildStarLayer(isSmall ? 500 : 1200, 400, 0.9, starColors[0]));
-  starGroups.push(buildStarLayer(isSmall ? 400 : 900, 300, 0.7, starColors[1]));
-  starGroups.push(buildStarLayer(isSmall ? 300 : 700, 220, 1.1, starColors[2]));
-  starGroups.push(buildStarLayer(isSmall ? 600 : 1500, 500, 0.5, starColors[3]));
+  // Reduced particle counts for lighter, faster rendering (esp. on mobile)
+  const scale = isSmallScreen ? 0.35 : 1;
+  starGroups.push(buildStarLayer(Math.round(900 * scale), 400, 0.9, starColors[0]));
+  starGroups.push(buildStarLayer(Math.round(650 * scale), 300, 0.7, starColors[1]));
+  starGroups.push(buildStarLayer(Math.round(500 * scale), 220, 1.1, starColors[2]));
+  starGroups.push(buildStarLayer(Math.round(1100 * scale), 500, 0.5, starColors[3]));
 
   function makeNebulaTexture(colorA, colorB) {
     const size = 256;
@@ -68,19 +72,19 @@ function initGalaxy() {
     return new THREE.CanvasTexture(c);
   }
 
-  const nebulaTex1 = makeNebulaTexture('rgba(139,92,246,0.25)', 'rgba(139,92,246,0.05)');
-  const nebulaTex2 = makeNebulaTexture('rgba(255,79,163,0.22)', 'rgba(255,79,163,0.04)');
-
-  function addNebula(texture, x, y, z, scale) {
-    const material = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
-    const sprite = new THREE.Sprite(material);
-    sprite.position.set(x, y, z);
-    sprite.scale.set(scale, scale, 1);
-    scene.add(sprite);
-    return sprite;
+  if (!isSmallScreen) {
+    const nebulaTex1 = makeNebulaTexture('rgba(134,112,240,0.25)', 'rgba(134,112,240,0.05)');
+    const nebulaTex2 = makeNebulaTexture('rgba(245,95,166,0.22)', 'rgba(245,95,166,0.04)');
+    function addNebula(texture, x, y, z, sc) {
+      const material = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+      const sprite = new THREE.Sprite(material);
+      sprite.position.set(x, y, z);
+      sprite.scale.set(sc, sc, 1);
+      scene.add(sprite);
+    }
+    addNebula(nebulaTex1, -60, 20, -150, 220);
+    addNebula(nebulaTex2, 70, -30, -200, 260);
   }
-  addNebula(nebulaTex1, -60, 20, -150, 220);
-  addNebula(nebulaTex2, 70, -30, -200, 260);
 
   const shootingStars = [];
   function spawnShootingStar() {
@@ -96,12 +100,13 @@ function initGalaxy() {
   }
   let shootingTimer = 0;
 
-  // Mouse parallax (subtle camera move)
   let targetRotX = 0, targetRotY = 0;
-  window.addEventListener('mousemove', (e) => {
-    targetRotY = (e.clientX / window.innerWidth - 0.5) * 0.15;
-    targetRotX = (e.clientY / window.innerHeight - 0.5) * 0.1;
-  });
+  if (hasHover) {
+    window.addEventListener('mousemove', (e) => {
+      targetRotY = (e.clientX / window.innerWidth - 0.5) * 0.15;
+      targetRotX = (e.clientY / window.innerHeight - 0.5) * 0.1;
+    }, { passive: true });
+  }
 
   function resize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -142,14 +147,14 @@ function initGalaxy() {
 }
 
 /* =========================================================
-   2. CURSOR PARTICLE TRAIL (canvas)
+   2. CURSOR PARTICLE TRAIL (desktop only, for performance)
    ========================================================= */
 function initCursorTrail() {
   const canvas = document.getElementById('trail');
-  if (!canvas || reduceMotion || !hasHover) { if (canvas) canvas.style.display = 'none'; return; }
+  if (!canvas || reduceMotion || !hasHover || isSmallScreen) { if (canvas) canvas.style.display = 'none'; return; }
   const ctx = canvas.getContext('2d');
   let particles = [];
-  const palette = ['rgba(139,92,246,0.7)', 'rgba(255,79,163,0.7)', 'rgba(69,232,196,0.7)'];
+  const palette = ['rgba(134,112,240,0.7)', 'rgba(245,95,166,0.7)', 'rgba(77,224,192,0.7)'];
 
   function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resize();
@@ -158,15 +163,15 @@ function initCursorTrail() {
   let lastSpawn = 0;
   window.addEventListener('mousemove', (e) => {
     const now = Date.now();
-    if (now - lastSpawn < 25) return;
+    if (now - lastSpawn < 30) return;
     lastSpawn = now;
     particles.push({
       x: e.clientX, y: e.clientY, r: Math.random() * 2 + 1.5,
       vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6,
       life: 1, color: palette[Math.floor(Math.random() * palette.length)]
     });
-    if (particles.length > 60) particles.shift();
-  });
+    if (particles.length > 50) particles.shift();
+  }, { passive: true });
 
   function tick() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -184,53 +189,50 @@ function initCursorTrail() {
 }
 
 /* =========================================================
-   3. SMOOTH SCROLL — SINGLE DRIVER (this fixes the lag bug)
-   Previously two loops (a manual rAF + gsap.ticker) were both
-   calling lenis.raf() at different time scales, causing stutter.
-   Now gsap.ticker is the ONLY driver.
+   3. SMOOTH SCROLL — single driver, snappier feel
    ========================================================= */
 function initSmoothScroll() {
   if (reduceMotion || typeof Lenis === 'undefined') return null;
 
   const lenis = new Lenis({
-    duration: 0.8,           // snappier than before (was 1.1)
-    easing: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic — direct, not floaty
+    duration: 0.8,
+    easing: (t) => 1 - Math.pow(1 - t, 3),
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 1.5
   });
+  lenisInstance = lenis;
 
   if (typeof gsap !== 'undefined') {
     gsap.ticker.add((time) => { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
-    if (typeof ScrollTrigger !== 'undefined') {
-      lenis.on('scroll', ScrollTrigger.update);
-    }
+    if (typeof ScrollTrigger !== 'undefined') lenis.on('scroll', ScrollTrigger.update);
   } else {
-    // Fallback: single manual driver only if GSAP failed to load
     function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
   }
 
-  // Scroll-velocity ambient motion blur
-  let blurAmount = 0;
-  lenis.on('scroll', (e) => {
-    const v = Math.min(Math.abs(e.velocity || 0), 3);
-    blurAmount = Math.max(blurAmount, v * 1.8);
-  });
-  function decayBlur() {
-    blurAmount *= 0.85;
-    if (blurAmount < 0.05) blurAmount = 0;
-    document.body.style.filter = blurAmount > 0.05 ? `blur(${blurAmount.toFixed(2)}px)` : 'none';
-    requestAnimationFrame(decayBlur);
+  // Scroll-velocity ambient motion blur — desktop only (skipped on mobile for performance)
+  if (!isSmallScreen) {
+    let blurAmount = 0;
+    lenis.on('scroll', (e) => {
+      const v = Math.min(Math.abs(e.velocity || 0), 3);
+      blurAmount = Math.max(blurAmount, v * 1.6);
+    });
+    function decayBlur() {
+      blurAmount *= 0.85;
+      if (blurAmount < 0.05) blurAmount = 0;
+      document.body.style.filter = blurAmount > 0.05 ? `blur(${blurAmount.toFixed(2)}px)` : 'none';
+      requestAnimationFrame(decayBlur);
+    }
+    decayBlur();
   }
-  decayBlur();
 
   return lenis;
 }
 
 /* =========================================================
-   4. GSAP SCROLL STORYTELLING — unique reveal per section
+   4. GSAP SCROLL STORYTELLING
    ========================================================= */
 function initScrollAnimations() {
   if (typeof gsap === 'undefined') {
@@ -266,7 +268,7 @@ function initScrollAnimations() {
 }
 
 /* =========================================================
-   5. KINETIC TYPOGRAPHY — letter-by-letter for hero + all section titles
+   5. KINETIC TYPOGRAPHY
    ========================================================= */
 function splitIntoLetters(el, className) {
   const text = el.textContent.trim();
@@ -282,7 +284,6 @@ function splitIntoLetters(el, className) {
 function initKineticTypography() {
   const heroName = document.getElementById('heroName');
   if (heroName) splitIntoLetters(heroName, 'letter');
-
   document.querySelectorAll('.kinetic-heading').forEach(h => splitIntoLetters(h, 'letter'));
 
   if (reduceMotion || typeof gsap === 'undefined') {
@@ -290,15 +291,11 @@ function initKineticTypography() {
     return;
   }
 
-  // Hero letters animate immediately on load
   if (heroName) {
-    gsap.to(heroName.querySelectorAll('.letter'), {
-      opacity: 1, y: 0, duration: 0.7, stagger: 0.06, ease: 'back.out(1.6)', delay: 0.2
-    });
+    gsap.to(heroName.querySelectorAll('.letter'), { opacity: 1, y: 0, duration: 0.6, stagger: 0.035, ease: 'back.out(1.6)', delay: 0.2 });
   }
   gsap.to('[data-gsap="fade"]', { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, delay: 0.5, ease: 'power2.out' });
 
-  // Section headings animate on scroll into view
   document.querySelectorAll('.section-head .kinetic-heading, .footer-card .kinetic-heading').forEach(h => {
     gsap.to(h.querySelectorAll('.letter'), {
       opacity: 1, y: 0, duration: 0.5, stagger: 0.025, ease: 'power2.out',
@@ -352,7 +349,7 @@ function initExpandableCards() {
 }
 
 /* =========================================================
-   8. MOBILE NAV
+   8. MOBILE NAV (3D flip panel)
    ========================================================= */
 function initMobileNav() {
   const navToggle = document.getElementById('navToggle');
@@ -360,16 +357,57 @@ function initMobileNav() {
   if (!navToggle || !navLinks) return;
   navToggle.addEventListener('click', () => {
     const open = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('open', open);
     navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
     navToggle.setAttribute('aria-expanded', 'false');
   }));
 }
 
 /* =========================================================
-   9. COPY EMAIL
+   9. NAV SCROLLSPY — sliding 3D indicator
+   ========================================================= */
+function initNavScrollSpy() {
+  const indicator = document.getElementById('navIndicator');
+  const links = Array.from(document.querySelectorAll('.nav-links a'));
+  const sections = links.map(a => document.getElementById(a.dataset.section)).filter(Boolean);
+  if (!indicator || !links.length || !sections.length) return;
+
+  function moveIndicatorTo(link) {
+    if (!link || window.innerWidth <= 640) return;
+    const wrapRect = link.closest('.nav-links').getBoundingClientRect();
+    const rect = link.getBoundingClientRect();
+    indicator.style.left = `${rect.left - wrapRect.left}px`;
+    indicator.style.width = `${rect.width}px`;
+    indicator.style.opacity = '1';
+  }
+
+  function setActive(id) {
+    links.forEach(l => l.classList.toggle('active', l.dataset.section === id));
+    const activeLink = links.find(l => l.dataset.section === id);
+    moveIndicatorTo(activeLink);
+  }
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    sections.forEach(s => observer.observe(s));
+  }
+
+  window.addEventListener('resize', () => {
+    const active = links.find(l => l.classList.contains('active'));
+    if (active) moveIndicatorTo(active);
+  });
+}
+
+/* =========================================================
+   10. COPY EMAIL
    ========================================================= */
 function initEmailCopy() {
   const emailCopy = document.getElementById('emailCopy');
@@ -388,7 +426,7 @@ function initEmailCopy() {
 }
 
 /* =========================================================
-   10. 3D CURSOR TILT (hero photo card)
+   11. 3D CURSOR TILT (hero photo card)
    ========================================================= */
 function initTiltCard() {
   const tiltCard = document.getElementById('tiltCard');
@@ -408,18 +446,18 @@ function initTiltCard() {
 }
 
 /* =========================================================
-   11. CURSOR SPOTLIGHT
+   12. CURSOR SPOTLIGHT
    ========================================================= */
 function initSpotlight() {
   const spotlight = document.getElementById('spotlight');
-  if (!spotlight || reduceMotion || !hasHover) { if (spotlight) spotlight.style.display = 'none'; return; }
+  if (!spotlight || reduceMotion || !hasHover || isSmallScreen) { if (spotlight) spotlight.style.display = 'none'; return; }
   window.addEventListener('mousemove', (e) => {
     spotlight.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-  });
+  }, { passive: true });
 }
 
 /* =========================================================
-   12. MAGNETIC BUTTONS
+   13. MAGNETIC BUTTONS
    ========================================================= */
 function initMagneticButtons() {
   if (reduceMotion || !hasHover) return;
@@ -435,7 +473,7 @@ function initMagneticButtons() {
 }
 
 /* =========================================================
-   13. AMBIENT SOUND TOGGLE (Web Audio API — no audio file)
+   14. AMBIENT SOUND TOGGLE
    ========================================================= */
 function initAmbientSound() {
   const toggle = document.getElementById('soundToggle');
@@ -474,6 +512,51 @@ function initAmbientSound() {
 }
 
 /* =========================================================
+   15. MODAL / ARTICLE READER
+   ========================================================= */
+function initModals() {
+  const overlay = document.getElementById('modalOverlay');
+  const body = document.getElementById('modalBody');
+  const closeBtn = document.getElementById('modalClose');
+  if (!overlay || !body) return;
+
+  let lastFocused = null;
+
+  function openModal(templateId) {
+    const template = document.getElementById(templateId);
+    if (!template) return;
+    body.innerHTML = '';
+    body.appendChild(template.content.cloneNode(true));
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    lastFocused = document.activeElement;
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (lenisInstance) lenisInstance.stop();
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lenisInstance) lenisInstance.start();
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('[data-modal]').forEach(trigger => {
+    trigger.addEventListener('click', () => openModal(trigger.getAttribute('data-modal')));
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+}
+
+/* =========================================================
    INIT
    ========================================================= */
 document.addEventListener('DOMContentLoaded', () => {
@@ -487,9 +570,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initExpandableCards();
   initMobileNav();
+  initNavScrollSpy();
   initEmailCopy();
   initTiltCard();
   initSpotlight();
   initMagneticButtons();
   initAmbientSound();
+  initModals();
 });
