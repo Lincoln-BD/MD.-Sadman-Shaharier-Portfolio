@@ -199,7 +199,10 @@ function initSmoothScroll() {
     easing: (t) => 1 - Math.pow(1 - t, 3),
     smoothWheel: true,
     wheelMultiplier: 1,
-    touchMultiplier: 1.5
+    touchMultiplier: 1.5,
+    // Let native scrolling happen normally inside the article modal
+    // (fixes: mouse wheel not scrolling the "Read More" popup)
+    prevent: (node) => !!(node && node.closest && node.closest('.modal-panel'))
   });
   lenisInstance = lenis;
 
@@ -212,17 +215,23 @@ function initSmoothScroll() {
     requestAnimationFrame(raf);
   }
 
-  // Scroll-velocity ambient motion blur — desktop only (skipped on mobile for performance)
+  // Scroll-velocity ambient motion blur — desktop only, lighter touch for smoothness,
+  // and skipped entirely while a modal is open (avoids extra repaint cost + visual clash).
   if (!isSmallScreen) {
     let blurAmount = 0;
     lenis.on('scroll', (e) => {
-      const v = Math.min(Math.abs(e.velocity || 0), 3);
-      blurAmount = Math.max(blurAmount, v * 1.6);
+      if (window.__modalOpen) return;
+      const v = Math.min(Math.abs(e.velocity || 0), 2);
+      blurAmount = Math.max(blurAmount, v * 1.0);
     });
     function decayBlur() {
-      blurAmount *= 0.85;
-      if (blurAmount < 0.05) blurAmount = 0;
-      document.body.style.filter = blurAmount > 0.05 ? `blur(${blurAmount.toFixed(2)}px)` : 'none';
+      if (window.__modalOpen) {
+        document.body.style.filter = 'none';
+      } else {
+        blurAmount *= 0.85;
+        if (blurAmount < 0.05) blurAmount = 0;
+        document.body.style.filter = blurAmount > 0.05 ? `blur(${blurAmount.toFixed(2)}px)` : 'none';
+      }
       requestAnimationFrame(decayBlur);
     }
     decayBlur();
@@ -273,11 +282,21 @@ function initScrollAnimations() {
 function splitIntoLetters(el, className) {
   const text = el.textContent.trim();
   el.textContent = '';
-  text.split('').forEach(ch => {
-    const span = document.createElement('span');
-    span.className = className;
-    span.textContent = ch === ' ' ? '\u00A0' : ch;
-    el.appendChild(span);
+  // Split by word first, so each word is wrapped in an atomic "nowrap" span.
+  // This guarantees the browser can only line-break BETWEEN words, never inside one
+  // (fixes "Shaharier" incorrectly rendering as "Sha Haraier").
+  const words = text.split(' ');
+  words.forEach((word, wi) => {
+    const wordSpan = document.createElement('span');
+    wordSpan.className = 'word-wrap';
+    word.split('').forEach(ch => {
+      const span = document.createElement('span');
+      span.className = className;
+      span.textContent = ch;
+      wordSpan.appendChild(span);
+    });
+    el.appendChild(wordSpan);
+    if (wi < words.length - 1) el.appendChild(document.createTextNode(' '));
   });
 }
 
@@ -432,16 +451,24 @@ function initTiltCard() {
   const tiltCard = document.getElementById('tiltCard');
   if (!tiltCard || reduceMotion || !hasHover) return;
   const wrap = tiltCard.closest('.hero-photo-wrap');
+  let ticking = false, lastEvent = null;
+
   wrap.addEventListener('mousemove', (e) => {
-    const rect = tiltCard.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    const rotateY = (x - 0.5) * 24;
-    const rotateX = (0.5 - y) * 24;
-    tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    tiltCard.style.setProperty('--mx', `${x * 100}%`);
-    tiltCard.style.setProperty('--my', `${y * 100}%`);
-  });
+    lastEvent = e;
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const rect = tiltCard.getBoundingClientRect();
+      const x = (lastEvent.clientX - rect.left) / rect.width;
+      const y = (lastEvent.clientY - rect.top) / rect.height;
+      const rotateY = (x - 0.5) * 24;
+      const rotateX = (0.5 - y) * 24;
+      tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      tiltCard.style.setProperty('--mx', `${x * 100}%`);
+      tiltCard.style.setProperty('--my', `${y * 100}%`);
+      ticking = false;
+    });
+  }, { passive: true });
   wrap.addEventListener('mouseleave', () => { tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
 }
 
@@ -462,12 +489,19 @@ function initSpotlight() {
 function initMagneticButtons() {
   if (reduceMotion || !hasHover) return;
   document.querySelectorAll('.magnetic').forEach(btn => {
+    let ticking = false, lastEvent = null;
     btn.addEventListener('mousemove', (e) => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
-    });
+      lastEvent = e;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const rect = btn.getBoundingClientRect();
+        const x = lastEvent.clientX - rect.left - rect.width / 2;
+        const y = lastEvent.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+        ticking = false;
+      });
+    }, { passive: true });
     btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
   });
 }
@@ -518,7 +552,15 @@ function initModals() {
   const overlay = document.getElementById('modalOverlay');
   const body = document.getElementById('modalBody');
   const closeBtn = document.getElementById('modalClose');
+  const panel = overlay ? overlay.querySelector('.modal-panel') : null;
   if (!overlay || !body) return;
+
+  // Defensive backup: even if Lenis's own exclusion misses it, stop the
+  // wheel/touch event from ever bubbling up to Lenis's page-level listener.
+  if (panel) {
+    panel.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
+    panel.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
+  }
 
   let lastFocused = null;
 
@@ -533,6 +575,7 @@ function initModals() {
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    window.__modalOpen = true;
     if (lenisInstance) lenisInstance.stop();
     closeBtn.focus();
   }
@@ -541,6 +584,7 @@ function initModals() {
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    window.__modalOpen = false;
     if (lenisInstance) lenisInstance.start();
     if (lastFocused) lastFocused.focus();
   }
