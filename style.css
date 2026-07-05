@@ -133,7 +133,8 @@ i[data-lucide] { width: 1em; height: 1em; vertical-align: -0.15em; }
 .hero { position: relative; z-index: 3; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 140px 24px 60px; perspective: 1200px; overflow: hidden; }
 .hero-grid { max-width: var(--container); width: 100%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
 .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px; color: var(--violet); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; }
-.hero-name { font-family: var(--font-display); font-size: clamp(40px, 6.4vw, 84px); font-weight: 700; line-height: 1.05; display: flex; flex-wrap: wrap; }
+.hero-name { font-family: var(--font-display); font-size: clamp(34px, 6.4vw, 84px); font-weight: 700; line-height: 1.15; }
+.word-wrap { display: inline-block; white-space: nowrap; } /* keeps each word intact — never splits mid-word */
 .hero-name .letter, .kinetic-heading .letter {
   display: inline-block;
   background: linear-gradient(120deg, var(--white), var(--violet) 55%, var(--pink));
@@ -178,7 +179,7 @@ i[data-lucide] { width: 1em; height: 1em; vertical-align: -0.15em; }
 .section-alt > .section-head, .section-alt > .orbit-timeline, .section-alt > .hud-grid { max-width: var(--container); margin-left: auto; margin-right: auto; }
 .section-head { max-width: 640px; margin-bottom: 54px; }
 .tag-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 1.5px; color: var(--violet); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; }
-.section-head h2 { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 46px); font-weight: 700; margin-bottom: 12px; display: flex; flex-wrap: wrap; }
+.section-head h2 { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 46px); font-weight: 700; margin-bottom: 12px; }
 .section-head p { color: var(--frost-dim); font-size: 15.5px; }
 [data-gsap] { opacity: 0; }
 
@@ -312,7 +313,7 @@ i[data-lucide] { width: 1em; height: 1em; vertical-align: -0.15em; }
 /* ============ FOOTER ============ */
 .footer { position: relative; z-index: 3; padding: 110px 24px 50px; text-align: center; }
 .footer-card { max-width: 600px; margin: 0 auto; padding: 56px 40px; }
-.footer-card h2 { font-family: var(--font-display); font-size: clamp(30px, 4.5vw, 42px); font-weight: 700; margin-bottom: 12px; justify-content: center; }
+.footer-card h2 { font-family: var(--font-display); font-size: clamp(30px, 4.5vw, 42px); font-weight: 700; margin-bottom: 12px; text-align: center; }
 .footer-sub { color: var(--frost-dim); margin-bottom: 30px; }
 .email-copy { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; font-family: var(--font-mono); color: var(--white); padding: 10px 0; margin-bottom: 34px; }
 .email-copy i { margin-bottom: 4px; color: var(--violet); }
@@ -373,7 +374,7 @@ i[data-lucide] { width: 1em; height: 1em; vertical-align: -0.15em; }
 @media (max-width: 980px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
   .hero-text { order: 2; }
-  .hero-name, .kinetic-heading { justify-content: center; }
+  .hero-name, .kinetic-heading { text-align: center; }
   .hero-photo-wrap { order: 1; max-width: 260px; }
   .hero-desc { margin-left: auto; margin-right: auto; }
   .hero-ctas { justify-content: center; }
@@ -392,15 +393,31 @@ i[data-lucide] { width: 1em; height: 1em; vertical-align: -0.15em; }
   .nav-links-wrap { position: static; }
   .nav-links {
     position: fixed; top: 68px; right: 16px; background: var(--nebula);
-    border: 1px solid var(--glass-border); border-radius: 14px;
-    flex-direction: column; gap: 4px; padding: 14px 18px;
-    max-width: 220px;
+    border: 1px solid transparent; border-radius: 14px;
+    flex-direction: column; gap: 4px;
+    width: 190px; max-width: calc(100vw - 32px);
     perspective: 600px;
+    /* Collapsed by default — zero size, invisible, un-clickable.
+       This fixes the "permanent empty box blocking content" bug. */
+    max-height: 0;
+    padding: 0 18px;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    box-shadow: none;
+    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-links.open {
+    max-height: 420px;
+    padding: 14px 18px;
+    opacity: 1;
+    border-color: var(--glass-border);
+    box-shadow: 0 20px 40px -14px rgba(0,0,0,0.5);
+    pointer-events: auto;
   }
   .nav-links li { transform: rotateX(-30deg) translateY(10px); opacity: 0; transition: transform 0.35s ease, opacity 0.35s ease; }
   .nav-links li a { display: block; padding: 10px 6px; }
   .nav-links.open li { transform: rotateX(0) translateY(0); opacity: 1; }
-  .nav-links:not(.open) { pointer-events: none; }
   .nav-links.open li:nth-child(1) { transition-delay: 0.03s; }
   .nav-links.open li:nth-child(2) { transition-delay: 0.06s; }
   .nav-links.open li:nth-child(3) { transition-delay: 0.09s; }
