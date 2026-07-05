@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lincoln — HR & Operations Executive | Football Intelligence | Deen & Growth</title>
-<meta name="description" content="Premium cosmic portfolio of Lincoln — HR & Operations Executive, aspiring MSc student in Germany, football analytics and knowledge enthusiast.">
+<title>MD. Sadman Shaharier — HR & Operations Executive | Football Intelligence | Deen & Growth</title>
+<meta name="description" content="Premium cosmic portfolio of MD. Sadman Shaharier — HR & Operations Executive, aspiring MSc student in Germany, football analytics and knowledge enthusiast.">
 <meta name="theme-color" content="#0A0A16">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,26 +22,29 @@
 <div class="blob blob-c" aria-hidden="true"></div>
 <div class="cursor-spotlight" id="spotlight" aria-hidden="true"></div>
 
-<!-- ============ NAV ============ -->
+<!-- ============ NAV (3D redesign) ============ -->
 <nav class="nav" id="nav">
   <div class="nav-inner glass">
-    <a href="#home" class="nav-logo">L<span class="dot">.</span></a>
+    <a href="#home" class="nav-logo">MS<span class="dot">.</span></a>
     <button class="sound-toggle" id="soundToggle" aria-pressed="false" aria-label="Toggle ambient sound">
       <i data-lucide="volume-x" id="soundIcon"></i>
     </button>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#education">Education</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#sports">Sports HUD</a></li>
-      <li><a href="#global">Global</a></li>
-      <li><a href="#deen">Deen</a></li>
-      <li><a href="#entertainment">Screen Time</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <div class="nav-links-wrap">
+      <span class="nav-indicator" id="navIndicator" aria-hidden="true"></span>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#education" data-section="education">Education</a></li>
+        <li><a href="#experience" data-section="experience">Experience</a></li>
+        <li><a href="#skills" data-section="skills">Skills</a></li>
+        <li><a href="#sports" data-section="sports">Sports HUD</a></li>
+        <li><a href="#global" data-section="global">Global</a></li>
+        <li><a href="#deen" data-section="deen">Deen</a></li>
+        <li><a href="#entertainment" data-section="entertainment">Screen Time</a></li>
+        <li><a href="#contact" data-section="contact">Contact</a></li>
+      </ul>
+    </div>
   </div>
 </nav>
 
@@ -51,7 +54,7 @@
   <div class="hero-grid">
     <div class="hero-text">
       <span class="eyebrow" data-gsap="fade"><i data-lucide="rocket"></i> AVAILABLE FOR OPPORTUNITIES</span>
-      <h1 class="hero-name" id="heroName" aria-label="Lincoln">LINCOLN</h1>
+      <h1 class="hero-name" id="heroName" aria-label="MD. Sadman Shaharier">MD. SADMAN SHAHARIER</h1>
       <div class="hero-cycle" id="cycleText" aria-live="polite"></div>
       <p class="hero-desc" data-gsap="fade">HR & Operations Executive building toward a fully-funded Master's in Germany — with a sharp, analytical eye for football tactics, markets, and knowledge.</p>
       <div class="hero-ctas" data-gsap="fade">
@@ -66,7 +69,7 @@
       <div class="tilt-card" id="tiltCard">
         <div class="tilt-inner glass">
           <div class="hologram-sheen"></div>
-          <div class="photo-inner">L</div>
+          <div class="photo-inner two-letter">MS</div>
           <div class="photo-badge">🇩🇪 Germany-bound</div>
           <div class="tilt-shine"></div>
         </div>
@@ -198,7 +201,7 @@
   <div class="section-head" data-gsap="up">
     <span class="tag-label"><i data-lucide="brain-circuit"></i> 03 — Strategic Expertise</span>
     <h2 class="kinetic-heading">Skills</h2>
-    <p>Core capability clusters — each one sharpened through real practice, not just theory.</p>
+    <p>Core capability clusters — click any card to read the full article.</p>
   </div>
 
   <div class="skill-categories">
@@ -210,16 +213,18 @@
         <span class="neon-tag violet">Digital Marketing Strategy</span>
         <span class="neon-tag violet">Campaign Positioning</span>
       </div>
+      <button class="read-more" data-modal="modal-growth">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
 
     <div class="skill-cat float-card border-glow" data-gsap="scale" style="--delay:0.15s">
       <span class="skill-cat-icon"><i data-lucide="coins"></i></span>
       <h3>Global Commerce</h3>
-      <p class="skill-desc">Practical understanding of cryptocurrency markets and blockchain fundamentals — reading structure, not just price.</p>
+      <p class="skill-desc">Cryptocurrency markets and blockchain fundamentals — how it works, key coins, and the basics of technical analysis.</p>
       <div class="neon-tags">
         <span class="neon-tag pink">Cryptocurrency Markets</span>
         <span class="neon-tag pink">Blockchain Fundamentals</span>
       </div>
+      <button class="read-more" data-modal="modal-crypto">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
 
     <div class="skill-cat float-card border-glow" data-gsap="scale" style="--delay:0.3s">
@@ -230,6 +235,7 @@
         <span class="neon-tag aqua">German — A1 Certified</span>
         <span class="neon-tag aqua">A2 In Progress</span>
       </div>
+      <button class="read-more" data-modal="modal-german">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
   </div>
 </section>
@@ -239,7 +245,7 @@
   <div class="section-head" data-gsap="up">
     <span class="tag-label"><i data-lucide="radar"></i> 04 — Sports & Analytics HUD</span>
     <h2 class="kinetic-heading">On the Pitch, In the Data</h2>
-    <p>Two lenses on the same passion — deep analysis and active play.</p>
+    <p>Two lenses on the same passion — click a panel to read more.</p>
   </div>
 
   <div class="hud-grid">
@@ -256,6 +262,7 @@
         <div class="readout"><span class="readout-label">LENS</span><span class="readout-val violet">Tactics + Data</span></div>
         <div class="readout"><span class="readout-label">METHOD</span><span class="readout-val violet">Formations · Pressing · xG</span></div>
       </div>
+      <button class="read-more" data-modal="modal-tactical">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
 
     <div class="hud-panel active border-glow" data-gsap="left">
@@ -270,6 +277,7 @@
         <div class="active-tile"><i data-lucide="badge"></i>Badminton</div>
         <div class="active-tile glow-badge"><i data-lucide="gamepad-2"></i>eFootball</div>
       </div>
+      <button class="read-more" data-modal="modal-athletic">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
   </div>
 </section>
@@ -279,7 +287,7 @@
   <div class="section-head" data-gsap="up">
     <span class="tag-label"><i data-lucide="globe"></i> 05 — Global Panorama & Tech Future</span>
     <h2 class="kinetic-heading">Watching the Horizon</h2>
-    <p>Macro trends and emerging technology, tracked closely and critically.</p>
+    <p>Macro trends and emerging technology — click a card to read more.</p>
   </div>
 
   <div class="panorama-grid">
@@ -291,6 +299,7 @@
         <span class="neon-tag violet"><span class="status-pulse"></span>Geopolitics</span>
         <span class="neon-tag violet"><span class="status-pulse"></span>Islamic Politics</span>
       </div>
+      <button class="read-more" data-modal="modal-macro">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
 
     <div class="panorama-card border-glow" data-gsap="scale" style="--delay:0.15s">
@@ -301,6 +310,7 @@
         <span class="neon-tag pink"><span class="status-pulse"></span>Advanced AI Systems</span>
         <span class="neon-tag pink"><span class="status-pulse"></span>Autonomous Robotics</span>
       </div>
+      <button class="read-more" data-modal="modal-future-tech">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
   </div>
 </section>
@@ -319,6 +329,7 @@
       <span class="deen-icon"><i data-lucide="moon-star"></i></span>
       <h3>Islamic Views</h3>
       <p>Personal philosophical reflections, ethics, and engagement with contemporary Islamic thought — approached with an evidence-based, source-grounded mindset.</p>
+      <button class="read-more gold" data-modal="modal-islamic-views">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
 
     <div class="deen-card deen-station" data-gsap="fade" style="--delay:0.15s">
@@ -331,6 +342,7 @@
         <span class="deen-tag">Islamic History</span>
         <span class="deen-tag">Spiritual Discipline</span>
       </div>
+      <button class="read-more gold" data-modal="modal-deen-academy">Read: Iman, Islam & the Kalima <i data-lucide="arrow-up-right"></i></button>
     </div>
   </div>
 </section>
@@ -405,9 +417,186 @@
       </a>
     </div>
 
-    <p class="footer-note">© 2026 Lincoln. Crafted with precision.</p>
+    <p class="footer-note">© 2026 MD. Sadman Shaharier. Crafted with precision.</p>
   </div>
 </footer>
+
+<!-- ============ MODAL (article reader) ============ -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-panel glass">
+    <button class="modal-close" id="modalClose" aria-label="Close article"><i data-lucide="x"></i></button>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ============ ARTICLE TEMPLATES ============ -->
+<template id="modal-growth">
+  <span class="article-tag">SKILLS · GROWTH</span>
+  <h2>Digital Marketing Strategy — The Basics</h2>
+  <p>Digital marketing is how brands and people reach an audience online. A good strategy is not about posting randomly — it follows a structure.</p>
+  <h3>The Funnel</h3>
+  <ul>
+    <li><strong>Awareness</strong> — people discover you exist (ads, content, social posts)</li>
+    <li><strong>Consideration</strong> — they compare you to other options</li>
+    <li><strong>Conversion</strong> — they take action (buy, sign up, follow)</li>
+    <li><strong>Retention</strong> — they come back and stay engaged</li>
+  </ul>
+  <h3>Core Channels</h3>
+  <ul>
+    <li><strong>Organic content</strong> — social media, blogs, SEO</li>
+    <li><strong>Paid ads</strong> — search ads, social ads</li>
+    <li><strong>Email & community</strong> — direct relationship building</li>
+  </ul>
+  <p>The key skill is <strong>positioning</strong> — saying the right message, to the right audience, at the right time.</p>
+</template>
+
+<template id="modal-crypto">
+  <span class="article-tag">SKILLS · GLOBAL COMMERCE</span>
+  <h2>Cryptocurrency & Blockchain — A Beginner's Guide</h2>
+
+  <h3>What is Crypto?</h3>
+  <p>Cryptocurrency is digital money that runs on a <strong>blockchain</strong> — a public record book shared across thousands of computers instead of one bank. No single company controls it, and every transaction is recorded permanently and openly.</p>
+
+  <h3>Major Coins, Explained Simply</h3>
+  <div class="coin-grid">
+    <div class="coin-card"><span class="coin-symbol">BTC</span><h4>Bitcoin</h4><p>The first cryptocurrency. Often called "digital gold" — used mainly as a store of value.</p></div>
+    <div class="coin-card"><span class="coin-symbol">ETH</span><h4>Ethereum</h4><p>A blockchain that runs programs called "smart contracts." Powers most apps, tokens, and NFTs.</p></div>
+    <div class="coin-card"><span class="coin-symbol">XRP</span><h4>XRP (Ripple)</h4><p>Built for fast, cheap cross-border payments between banks and payment providers.</p></div>
+    <div class="coin-card"><span class="coin-symbol">SEI</span><h4>Sei</h4><p>A newer, high-speed blockchain built specifically for fast trading applications.</p></div>
+  </div>
+
+  <h3>How to Invest via Binance (General Steps)</h3>
+  <ol>
+    <li>Create an account and complete identity verification (KYC)</li>
+    <li>Deposit funds using a bank transfer or card</li>
+    <li>Use the <strong>Spot</strong> market to buy a coin at the current price</li>
+    <li>Turn on 2-factor authentication (2FA) to secure your account</li>
+    <li>Consider moving larger holdings to a personal wallet for safekeeping</li>
+  </ol>
+
+  <h3>Technical Analysis Basics</h3>
+  <ul>
+    <li><strong>CoinMarketCap (CMC)</strong> — a website used to check a coin's price, ranking, and trading volume before researching it further</li>
+    <li><strong>Support & Resistance</strong> — price levels where a coin has repeatedly stopped falling (support) or stopped rising (resistance)</li>
+    <li><strong>Imbalance / Fair Value Gap (FVG)</strong> — a gap left on the price chart when price moves very fast in one direction, which price often returns to "fill" later</li>
+  </ul>
+
+  <p class="disclaimer"><i data-lucide="info"></i> Educational overview only — not financial advice. Crypto markets are highly volatile; always do your own research.</p>
+</template>
+
+<template id="modal-german">
+  <span class="article-tag">SKILLS · LINGUISTIC</span>
+  <h2>Learning German — A1 to A2</h2>
+  <p>German is being learned step by step, following the official <strong>CEFR</strong> levels (A1 → A2 → B1...), which is what German universities and visa offices require.</p>
+  <h3>What A1 Covers</h3>
+  <ul>
+    <li>Basic greetings, numbers, and daily phrases</li>
+    <li>Simple present-tense sentences</li>
+    <li>Reading and understanding short, simple texts</li>
+  </ul>
+  <h3>What A2 Adds</h3>
+  <ul>
+    <li>Talking about past events and daily routines</li>
+    <li>Handling simple real-life situations (shopping, directions, appointments)</li>
+    <li>A wider, more practical vocabulary</li>
+  </ul>
+  <p>Method: daily spaced-repetition vocabulary (Anki), listening practice (Deutsche Welle), and speaking practice with native speakers (Tandem).</p>
+</template>
+
+<template id="modal-tactical">
+  <span class="article-tag">SPORTS HUD · TACTICAL ANALYTICS</span>
+  <h2>Football Tactics — The Basics</h2>
+  <h3>Formations</h3>
+  <p>A formation (like 4-3-3 or 4-2-3-1) describes how players are arranged on the pitch — defenders, midfielders, and attackers.</p>
+  <h3>Pressing</h3>
+  <p>Pressing means chasing down the opponent quickly after losing the ball, to win it back high up the pitch before the other team can build an attack.</p>
+  <h3>Expected Goals (xG)</h3>
+  <p>xG estimates how likely a shot was to become a goal, based on distance, angle, and situation. It's used to judge chance quality, not just the scoreline.</p>
+  <h3>Why Bayern München</h3>
+  <p>Studied closely for their high pressing structure, dominant possession style, and consistently sharp tactical adjustments under different managers.</p>
+</template>
+
+<template id="modal-athletic">
+  <span class="article-tag">SPORTS HUD · ACTIVE ATHLETICISM</span>
+  <h2>Played & Competed</h2>
+  <p>Analysis is only half the picture — these are the games actually played, not just studied.</p>
+  <ul>
+    <li><strong>Cricket</strong> — regular weekend matches with friends</li>
+    <li><strong>Football</strong> — five-a-side games, applying the tactics studied on screen</li>
+    <li><strong>Badminton</strong> — casual, competitive matches for quick reflexes</li>
+    <li><strong>eFootball</strong> — competitive matches against other players online</li>
+  </ul>
+</template>
+
+<template id="modal-macro">
+  <span class="article-tag">GLOBAL PANORAMA · MACRO DYNAMICS</span>
+  <h2>Following Global Power Shifts</h2>
+  <p>Geopolitics is the study of how geography, power, and politics interact between countries — who has influence, why, and how that changes over time.</p>
+  <h3>What's Tracked</h3>
+  <ul>
+    <li>Shifts in global alliances and power balance</li>
+    <li>Economic policy moves between major countries</li>
+    <li>The political landscape across Muslim-majority nations</li>
+  </ul>
+  <p>The goal is to understand events in context, rather than reacting to single headlines.</p>
+</template>
+
+<template id="modal-future-tech">
+  <span class="article-tag">GLOBAL PANORAMA · FUTURE TECH</span>
+  <h2>AI & Robotics — What's Coming</h2>
+  <h3>Artificial Intelligence</h3>
+  <p>AI systems learn patterns from data to perform tasks — from writing and translation to decision-making — and are becoming part of everyday tools.</p>
+  <h3>Autonomous Robotics</h3>
+  <p>Robots that can sense their environment and act without constant human control — used in factories, and increasingly, in daily life.</p>
+  <p>Tracking this space closely to understand how it will reshape work, business, and society.</p>
+</template>
+
+<template id="modal-islamic-views">
+  <span class="article-tag deen">DEEN · ISLAMIC VIEWS</span>
+  <h2>Personal Reflections on Islamic Thought</h2>
+  <p>An evidence-based approach to Islamic knowledge — prioritizing the Qur'an and authentic Hadith, understood through the lens of the earliest generations of Muslims and the major scholars of Ahl al-Sunna wal-Jama'ah.</p>
+  <p>This approach values clear textual evidence over cultural custom, while remaining respectful toward the broader Sunni scholarly tradition, including Hanafi, Deobandi, and other schools of thought.</p>
+</template>
+
+<template id="modal-deen-academy">
+  <span class="article-tag deen">DEEN ACADEMY · STUDY STATION</span>
+  <h2>Iman, Islam & the Kalima</h2>
+
+  <h3>Iman (Faith) — The Six Pillars</h3>
+  <p>Based on the well-known Hadith of Jibril, Iman means believing in:</p>
+  <ol>
+    <li>Allah</li>
+    <li>His Angels</li>
+    <li>His Books (revealed scriptures)</li>
+    <li>His Messengers</li>
+    <li>The Last Day (Judgment)</li>
+    <li>Divine Decree (Qadr) — the good and the bad</li>
+  </ol>
+
+  <h3>Islam (Practice) — The Five Pillars</h3>
+  <p>Islam is built on five practical pillars:</p>
+  <ol>
+    <li><strong>Shahada</strong> — the testimony of faith</li>
+    <li><strong>Salah</strong> — the five daily prayers</li>
+    <li><strong>Zakat</strong> — obligatory charity</li>
+    <li><strong>Sawm</strong> — fasting in Ramadan</li>
+    <li><strong>Hajj</strong> — pilgrimage to Makkah, once in a lifetime if able</li>
+  </ol>
+
+  <h3>The Kalima (Shahada) & Its Conditions</h3>
+  <p>The Kalima is the declaration: <em>"La ilaha illallah, Muhammadur rasulullah"</em> — <strong>"There is no deity worthy of worship except Allah, and Muhammad is His Messenger."</strong></p>
+  <p>Scholars commonly summarize its conditions as:</p>
+  <ul>
+    <li><strong>Knowledge</strong> — understanding its meaning</li>
+    <li><strong>Certainty</strong> — believing it without doubt</li>
+    <li><strong>Acceptance</strong> — accepting what it requires</li>
+    <li><strong>Submission</strong> — acting on its requirements</li>
+    <li><strong>Truthfulness</strong> — saying it sincerely, not falsely</li>
+    <li><strong>Sincerity</strong> — intending it purely for Allah alone</li>
+    <li><strong>Love</strong> — loving this declaration and what it entails</li>
+  </ul>
+  <p class="disclaimer"><i data-lucide="info"></i> A concise summary for learning purposes — not a substitute for guidance from a qualified teacher of Islamic knowledge.</p>
+</template>
 
 <!-- ============ CDN LIBRARIES ============ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
