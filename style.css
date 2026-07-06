@@ -155,19 +155,27 @@ i[data-lucide] { width: 1em; height: 1em; vertical-align: -0.15em; }
 .btn-glass { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(var(--glass-blur)); }
 .btn-glass:hover { border-color: var(--pink); }
 
-.hero-photo-wrap { position: relative; width: 100%; aspect-ratio: 1; max-width: 340px; margin: 0 auto; display: flex; align-items: center; justify-content: center; transform-style: preserve-3d; }
-.orbit-ring { position: absolute; border: 1px solid rgba(134,112,240,0.22); border-radius: 50%; }
-.orbit-ring.r1 { inset: 0; animation: spin 18s linear infinite; }
-.orbit-ring.r2 { inset: 30px; border-style: dashed; border-color: rgba(245,95,166,0.22); animation: spin 24s linear infinite reverse; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.tilt-card { width: 62%; aspect-ratio: 1; transform-style: preserve-3d; transition: transform 0.15s ease-out; will-change: transform; }
-.tilt-inner { position: relative; width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; transform-style: preserve-3d; box-shadow: 0 30px 70px -20px rgba(134,112,240,0.32); overflow: hidden; }
-.hologram-sheen { position: absolute; inset: -50%; border-radius: 50%; background: conic-gradient(from 0deg, transparent, rgba(134,112,240,0.22), transparent 30%, rgba(245,95,166,0.18), transparent 55%, rgba(77,224,192,0.18), transparent 80%); mix-blend-mode: overlay; animation: spin 8s linear infinite; pointer-events: none; }
-.photo-inner { font-family: var(--font-display); font-weight: 700; color: var(--white); background: linear-gradient(150deg, rgba(134,112,240,0.28), rgba(245,95,166,0.18)); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; transform: translateZ(20px); font-size: 64px; }
-.photo-inner.two-letter { font-size: 42px; letter-spacing: 1px; } /* fixes overflow for 2-letter monogram */
-.tilt-shine { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.16), transparent 60%); pointer-events: none; }
-.photo-badge { position: absolute; bottom: -6px; background: var(--nebula); border: 1px solid var(--violet); font-family: var(--font-mono); font-size: 10.5px; padding: 5px 12px; border-radius: 100px; white-space: nowrap; transform: translateZ(30px); z-index: 2; }
+/* ===== Hugging Face Spaces AI chat embed — replaces the old photo/emblem slot ===== */
+.ai-embed-wrap { position: relative; width: 100%; max-width: 420px; margin: 0 auto; }
+.ai-embed-card { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.ai-embed-topbar { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--frost-dim); padding: 0 4px; }
+.ai-embed-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--aqua); animation: pulseDot 1.8s infinite; flex-shrink: 0; }
+.ai-embed-label { flex: 1; }
+.ai-embed-popout { display: flex; color: var(--frost-dim); transition: color 0.2s ease, transform 0.2s ease; }
+.ai-embed-popout:hover { color: var(--violet); transform: translate(1px, -1px); }
+.ai-embed-popout i { width: 15px; height: 15px; }
+
+.ai-embed-frame-shell { position: relative; width: 100%; height: 540px; border-radius: 14px; overflow: hidden; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.25); }
+.ai-embed-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.ai-embed-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-mono); font-size: 12.5px; color: var(--frost-dim); background: var(--nebula); z-index: 1; transition: opacity 0.3s ease; }
+.ai-embed-spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); border-top-color: var(--violet); animation: spin 0.8s linear infinite; }
+
+.ai-embed-note { display: flex; align-items: flex-start; gap: 7px; font-size: 11.5px; color: var(--frost-dim); padding: 0 4px; line-height: 1.5; margin: 0; }
+.ai-embed-note i { width: 14px; height: 14px; margin-top: 1px; flex-shrink: 0; color: var(--gold); }
+.ai-embed-note a { color: var(--violet); border-bottom: 1px solid rgba(134,112,240,0.4); }
+.ai-embed-note a:hover { color: var(--pink); }
 
 .scroll-cue { margin-top: 60px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--frost-dim); display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .scroll-cue span { animation: bob 1.6s ease-in-out infinite; }
@@ -370,12 +378,31 @@ i[data-lucide] { width: 1em; height: 1em; vertical-align: -0.15em; }
 .coin-card h4 { margin-top: 0; }
 .coin-card p { font-size: 13px; margin-bottom: 0; }
 
+/* Live crypto price table */
+.live-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--aqua); background: rgba(77,224,192,0.1); border: 1px solid rgba(77,224,192,0.3); padding: 3px 10px; border-radius: 100px; vertical-align: middle; margin-left: 8px; }
+.live-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--aqua); animation: pulseDot 1.8s infinite; flex-shrink: 0; }
+.crypto-table-wrap { overflow-x: auto; margin: 14px 0 10px; border: 1px solid var(--glass-border); border-radius: 10px; }
+.crypto-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12.5px; min-width: 480px; }
+.crypto-table th { text-align: left; padding: 10px 12px; color: var(--frost-dim); font-weight: 500; font-size: 11px; letter-spacing: 0.5px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); }
+.crypto-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--white); white-space: nowrap; }
+.crypto-table tr:last-child td { border-bottom: none; }
+.coin-cell { font-family: var(--font-body); font-weight: 600; font-size: 13px; }
+.coin-cell .coin-symbol { font-family: var(--font-mono); font-size: 10px; margin-bottom: 0; margin-right: 6px; }
+.change-up { color: #4ADE80; }
+.change-down { color: #F87171; }
+.crypto-loading { text-align: center; color: var(--frost-dim); padding: 22px; white-space: normal; }
+.crypto-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 11.5px; color: var(--frost-dim); margin-top: 4px; flex-wrap: wrap; gap: 8px; }
+.crypto-refresh { font-family: var(--font-mono); font-size: 11px; background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); color: var(--white); padding: 5px 12px; border-radius: 100px; cursor: pointer; transition: border-color 0.2s ease; }
+.crypto-refresh:hover { border-color: var(--violet); }
+.crypto-attribution { font-size: 11px; color: var(--frost-dim); opacity: 0.7; margin-top: 4px; }
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 980px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
   .hero-text { order: 2; }
   .hero-name, .kinetic-heading { text-align: center; }
-  .hero-photo-wrap { order: 1; max-width: 260px; }
+  .ai-embed-wrap { order: 1; max-width: 100%; }
+  .ai-embed-frame-shell { height: 440px; }
   .hero-desc { margin-left: auto; margin-right: auto; }
   .hero-ctas { justify-content: center; }
   .edu-matrix { grid-template-columns: repeat(2, 1fr); }
