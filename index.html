@@ -63,16 +63,33 @@
       </div>
     </div>
 
-    <div class="hero-photo-wrap">
-      <div class="orbit-ring r1"></div>
-      <div class="orbit-ring r2"></div>
-      <div class="tilt-card" id="tiltCard">
-        <div class="tilt-inner glass">
-          <div class="hologram-sheen"></div>
-          <div class="photo-inner two-letter">MS</div>
-          <div class="photo-badge">🇩🇪 Germany-bound</div>
-          <div class="tilt-shine"></div>
+    <div class="ai-embed-wrap">
+      <div class="ai-embed-card glass border-glow">
+        <div class="ai-embed-topbar">
+          <span class="ai-embed-dot"></span>
+          <span class="ai-embed-label">AI Chat · Hugging Face Spaces</span>
+          <a href="https://huggingface.co/spaces/gradio-templates/chatbot" target="_blank" rel="noopener noreferrer" class="ai-embed-popout" aria-label="Open this Space in a new tab">
+            <i data-lucide="external-link"></i>
+          </a>
         </div>
+        <div class="ai-embed-frame-shell">
+          <div class="ai-embed-loading" id="aiEmbedLoading">
+            <span class="ai-embed-spinner"></span> Waking up the Space…
+          </div>
+          <iframe
+            id="hfSpaceFrame"
+            class="ai-embed-iframe"
+            src="https://gradio-templates-chatbot.hf.space"
+            title="Hugging Face Spaces AI Chat"
+            loading="lazy"
+            referrerpolicy="no-referrer">
+          </iframe>
+        </div>
+        <p class="ai-embed-note">
+          <i data-lucide="info"></i>
+          Free Hugging Face Spaces can take a few seconds to wake up if idle.
+          <a href="https://huggingface.co/spaces/gradio-templates/chatbot" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a>
+        </p>
       </div>
     </div>
   </div>
@@ -218,11 +235,11 @@
 
     <div class="skill-cat float-card border-glow" data-gsap="scale" style="--delay:0.15s">
       <span class="skill-cat-icon"><i data-lucide="coins"></i></span>
-      <h3>Global Commerce</h3>
-      <p class="skill-desc">Cryptocurrency markets and blockchain fundamentals — how it works, key coins, and the basics of technical analysis.</p>
+      <h3>Cryptocurrencies</h3>
+      <p class="skill-desc">Live price tracking for 8 major coins — auto-converted to BDT — plus blockchain fundamentals and technical analysis basics.</p>
       <div class="neon-tags">
-        <span class="neon-tag pink">Cryptocurrency Markets</span>
-        <span class="neon-tag pink">Blockchain Fundamentals</span>
+        <span class="neon-tag pink">Live BDT Prices</span>
+        <span class="neon-tag pink">Market Cap Tracking</span>
       </div>
       <button class="read-more" data-modal="modal-crypto">Read article <i data-lucide="arrow-up-right"></i></button>
     </div>
@@ -451,18 +468,40 @@
 </template>
 
 <template id="modal-crypto">
-  <span class="article-tag">SKILLS · GLOBAL COMMERCE</span>
+  <span class="article-tag">SKILLS · CRYPTOCURRENCIES</span>
   <h2>Cryptocurrency & Blockchain — A Beginner's Guide</h2>
 
   <h3>What is Crypto?</h3>
   <p>Cryptocurrency is digital money that runs on a <strong>blockchain</strong> — a public record book shared across thousands of computers instead of one bank. No single company controls it, and every transaction is recorded permanently and openly.</p>
 
-  <h3>Major Coins, Explained Simply</h3>
+  <h3>Live Market Snapshot <span class="live-badge">LIVE</span></h3>
+  <p>Prices below update automatically, converted from USD to BDT, and sorted biggest-to-smallest by market cap.</p>
+  <div class="crypto-table-wrap">
+    <table class="crypto-table">
+      <thead>
+        <tr><th>Coin</th><th>Price</th><th>Market Cap</th><th>24h</th></tr>
+      </thead>
+      <tbody id="cryptoLiveGrid">
+        <tr><td colspan="4" class="crypto-loading">Loading live prices…</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="crypto-meta">
+    <span id="cryptoStatus">Loading…</span>
+    <button id="cryptoRefreshBtn" class="crypto-refresh" type="button">⟳ Refresh now</button>
+  </div>
+  <p class="crypto-attribution">Prices via CoinGecko · Exchange rate via ExchangeRate-API · Auto-refreshes every 5 minutes</p>
+
+  <h3>The 8 Coins, Explained Simply</h3>
   <div class="coin-grid">
     <div class="coin-card"><span class="coin-symbol">BTC</span><h4>Bitcoin</h4><p>The first cryptocurrency. Often called "digital gold" — used mainly as a store of value.</p></div>
     <div class="coin-card"><span class="coin-symbol">ETH</span><h4>Ethereum</h4><p>A blockchain that runs programs called "smart contracts." Powers most apps, tokens, and NFTs.</p></div>
     <div class="coin-card"><span class="coin-symbol">XRP</span><h4>XRP (Ripple)</h4><p>Built for fast, cheap cross-border payments between banks and payment providers.</p></div>
-    <div class="coin-card"><span class="coin-symbol">SEI</span><h4>Sei</h4><p>A newer, high-speed blockchain built specifically for fast trading applications.</p></div>
+    <div class="coin-card"><span class="coin-symbol">SOL</span><h4>Solana</h4><p>A high-speed blockchain known for very fast, low-cost transactions.</p></div>
+    <div class="coin-card"><span class="coin-symbol">DOGE</span><h4>Dogecoin</h4><p>Started as a joke coin, now widely used for tipping and payments thanks to a large, active community.</p></div>
+    <div class="coin-card"><span class="coin-symbol">TAO</span><h4>Bittensor</h4><p>Powers a decentralized network that trains and rewards artificial intelligence models.</p></div>
+    <div class="coin-card"><span class="coin-symbol">SUI</span><h4>Sui</h4><p>A newer blockchain designed for fast, parallel transaction processing.</p></div>
+    <div class="coin-card"><span class="coin-symbol">SEI</span><h4>Sei</h4><p>A high-speed blockchain built specifically for fast trading applications.</p></div>
   </div>
 
   <h3>How to Invest via Binance (General Steps)</h3>
@@ -481,8 +520,9 @@
     <li><strong>Imbalance / Fair Value Gap (FVG)</strong> — a gap left on the price chart when price moves very fast in one direction, which price often returns to "fill" later</li>
   </ul>
 
-  <p class="disclaimer"><i data-lucide="info"></i> Educational overview only — not financial advice. Crypto markets are highly volatile; always do your own research.</p>
+  <p class="disclaimer"><i data-lucide="info"></i> Educational overview only — not financial advice. Prices are approximate and crypto markets are highly volatile; always do your own research.</p>
 </template>
+
 
 <template id="modal-german">
   <span class="article-tag">SKILLS · LINGUISTIC</span>
