@@ -445,31 +445,19 @@ function initEmailCopy() {
 }
 
 /* =========================================================
-   11. 3D CURSOR TILT (hero photo card)
+   11. HUGGING FACE SPACES AI EMBED — hides the loading indicator
+   once the iframe fires its load event, or after a safety timeout.
+   Free-tier Spaces can go to sleep after inactivity and take a
+   few seconds to "wake up" on the first visit, so the timeout is
+   a bit longer than a typical page load.
    ========================================================= */
-function initTiltCard() {
-  const tiltCard = document.getElementById('tiltCard');
-  if (!tiltCard || reduceMotion || !hasHover) return;
-  const wrap = tiltCard.closest('.hero-photo-wrap');
-  let ticking = false, lastEvent = null;
-
-  wrap.addEventListener('mousemove', (e) => {
-    lastEvent = e;
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      const rect = tiltCard.getBoundingClientRect();
-      const x = (lastEvent.clientX - rect.left) / rect.width;
-      const y = (lastEvent.clientY - rect.top) / rect.height;
-      const rotateY = (x - 0.5) * 24;
-      const rotateX = (0.5 - y) * 24;
-      tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      tiltCard.style.setProperty('--mx', `${x * 100}%`);
-      tiltCard.style.setProperty('--my', `${y * 100}%`);
-      ticking = false;
-    });
-  }, { passive: true });
-  wrap.addEventListener('mouseleave', () => { tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
+function initAiEmbed() {
+  const iframe = document.getElementById('hfSpaceFrame');
+  const loading = document.getElementById('aiEmbedLoading');
+  if (!iframe || !loading) return;
+  const hideLoading = () => { loading.style.opacity = '0'; setTimeout(() => { loading.style.display = 'none'; }, 300); };
+  iframe.addEventListener('load', hideLoading);
+  setTimeout(hideLoading, 8000); // Spaces cold-start can take longer than a normal page load
 }
 
 /* =========================================================
@@ -548,6 +536,120 @@ function initAmbientSound() {
 /* =========================================================
    15. MODAL / ARTICLE READER
    ========================================================= */
+/* =========================================================
+   15. LIVE CRYPTO PRICES — auto-updating, converted to BDT
+   Uses CoinGecko (free, no key required for personal-use volume)
+   and ExchangeRate-API (free, no key) for the USD→BDT rate.
+   ========================================================= */
+const CRYPTO_COINS = [
+  { symbol: 'BTC',  name: 'Bitcoin',    id: 'bitcoin' },
+  { symbol: 'ETH',  name: 'Ethereum',   id: 'ethereum' },
+  { symbol: 'XRP',  name: 'XRP',        id: 'ripple' },
+  { symbol: 'SOL',  name: 'Solana',     id: 'solana' },
+  { symbol: 'DOGE', name: 'Dogecoin',   id: 'dogecoin' },
+  { symbol: 'TAO',  name: 'Bittensor',  id: 'bittensor' },
+  { symbol: 'SUI',  name: 'Sui',        id: 'sui' },
+  { symbol: 'SEI',  name: 'Sei',        id: 'sei-network' }
+];
+const FALLBACK_USD_BDT = 122; // only used if the live exchange-rate fetch fails
+const CRYPTO_REFRESH_MS = 5 * 60 * 1000; // auto-refresh every 5 minutes
+
+let cryptoRefreshInterval = null;
+let cryptoFetchInFlight = false;
+
+// Formats a BDT number using Lac (10^5) and Crore (10^7), per Bangladeshi convention
+function formatBDT(amount) {
+  if (amount == null || isNaN(amount)) return '—';
+  const CRORE = 1e7, LAC = 1e5;
+  if (Math.abs(amount) >= CRORE) return `৳${(amount / CRORE).toLocaleString('en-US', { maximumFractionDigits: 2 })} Cr`;
+  if (Math.abs(amount) >= LAC) return `৳${(amount / LAC).toLocaleString('en-US', { maximumFractionDigits: 2 })} Lac`;
+  return `৳${amount.toLocaleString('en-US', { maximumFractionDigits: amount < 1 ? 4 : 2 })}`;
+}
+
+async function fetchUsdToBdtRate() {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    const data = await res.json();
+    if (data && data.rates && data.rates.BDT) return data.rates.BDT;
+  } catch (e) { /* network/CORS issue — fall back below */ }
+  return FALLBACK_USD_BDT;
+}
+
+async function fetchCryptoUsdPrices() {
+  const ids = CRYPTO_COINS.map(c => c.id).join(',');
+  const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('CoinGecko request failed: ' + res.status);
+  return res.json();
+}
+
+function renderCryptoRows(prices, rate) {
+  const tbody = document.getElementById('cryptoLiveGrid');
+  if (!tbody) return;
+
+  const rows = CRYPTO_COINS.map(coin => {
+    const d = prices ? prices[coin.id] : null;
+    if (!d || d.usd == null) return { ...coin, price: null, cap: null, change: null };
+    return {
+      ...coin,
+      price: d.usd * rate,
+      cap: d.usd_market_cap ? d.usd_market_cap * rate : null,
+      change: typeof d.usd_24h_change === 'number' ? d.usd_24h_change : null
+    };
+  }).sort((a, b) => (b.cap || 0) - (a.cap || 0)); // smart structure: biggest market cap first
+
+  tbody.innerHTML = rows.map(r => {
+    const changeClass = r.change == null ? '' : (r.change >= 0 ? 'change-up' : 'change-down');
+    const changeText = r.change == null ? '—' : `${r.change >= 0 ? '+' : ''}${r.change.toFixed(2)}%`;
+    return `<tr>
+      <td class="coin-cell"><span class="coin-symbol">${r.symbol}</span>${r.name}</td>
+      <td>${r.price != null ? formatBDT(r.price) : '—'}</td>
+      <td>${r.cap != null ? formatBDT(r.cap) : '—'}</td>
+      <td class="${changeClass}">${changeText}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function refreshCryptoWidget() {
+  const tbody = document.getElementById('cryptoLiveGrid');
+  const statusEl = document.getElementById('cryptoStatus');
+  if (!tbody || cryptoFetchInFlight) return;
+  cryptoFetchInFlight = true;
+  if (statusEl) statusEl.textContent = 'Updating…';
+
+  try {
+    const [rate, prices] = await Promise.all([fetchUsdToBdtRate(), fetchCryptoUsdPrices()]);
+    renderCryptoRows(prices, rate);
+    if (statusEl) {
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      statusEl.textContent = `Updated ${time} · 1 USD ≈ ৳${rate.toFixed(2)}`;
+    }
+  } catch (err) {
+    if (statusEl) statusEl.textContent = 'Live prices unavailable right now — please try refreshing';
+    if (tbody.querySelector('.crypto-loading')) {
+      tbody.innerHTML = `<tr><td colspan="4" class="crypto-loading">Couldn't load live prices. Check your connection and tap Refresh.</td></tr>`;
+    }
+    console.error('Crypto widget fetch failed:', err);
+  } finally {
+    cryptoFetchInFlight = false;
+  }
+}
+
+function startCryptoWidget() {
+  refreshCryptoWidget();
+  if (cryptoRefreshInterval) clearInterval(cryptoRefreshInterval);
+  cryptoRefreshInterval = setInterval(refreshCryptoWidget, CRYPTO_REFRESH_MS);
+  const refreshBtn = document.getElementById('cryptoRefreshBtn');
+  if (refreshBtn) refreshBtn.addEventListener('click', refreshCryptoWidget);
+}
+
+function stopCryptoWidget() {
+  if (cryptoRefreshInterval) { clearInterval(cryptoRefreshInterval); cryptoRefreshInterval = null; }
+}
+
+/* =========================================================
+   16. MODAL / ARTICLE READER
+   ========================================================= */
 function initModals() {
   const overlay = document.getElementById('modalOverlay');
   const body = document.getElementById('modalBody');
@@ -571,6 +673,14 @@ function initModals() {
     body.appendChild(template.content.cloneNode(true));
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
+    // The live price table only exists in the crypto article — start/stop
+    // its auto-refresh loop only while that specific modal is open.
+    if (templateId === 'modal-crypto') {
+      startCryptoWidget();
+    } else {
+      stopCryptoWidget();
+    }
+
     lastFocused = document.activeElement;
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
@@ -585,6 +695,7 @@ function initModals() {
     overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     window.__modalOpen = false;
+    stopCryptoWidget();
     if (lenisInstance) lenisInstance.start();
     if (lastFocused) lastFocused.focus();
   }
@@ -616,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initNavScrollSpy();
   initEmailCopy();
-  initTiltCard();
+  initAiEmbed();
   initSpotlight();
   initMagneticButtons();
   initAmbientSound();
