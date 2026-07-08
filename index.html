@@ -10,6 +10,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>
+  // Runs before paint, so the site never "flashes" the wrong theme.
+  (function() {
+    var saved = localStorage.getItem('theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
 </head>
 <body>
 
@@ -26,6 +34,9 @@
 <nav class="nav" id="nav">
   <div class="nav-inner glass">
     <a href="#home" class="nav-logo">MS<span class="dot">.</span></a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark mode">
+      <i data-lucide="moon" id="themeIcon"></i>
+    </button>
     <button class="sound-toggle" id="soundToggle" aria-pressed="false" aria-label="Toggle ambient sound">
       <i data-lucide="volume-x" id="soundIcon"></i>
     </button>
@@ -63,33 +74,33 @@
       </div>
     </div>
 
-    <div class="ai-embed-wrap">
-      <div class="ai-embed-card glass border-glow">
-        <div class="ai-embed-topbar">
-          <span class="ai-embed-dot"></span>
-          <span class="ai-embed-label">AI Chat · Hugging Face Spaces</span>
-          <a href="https://huggingface.co/spaces/gradio-templates/chatbot" target="_blank" rel="noopener noreferrer" class="ai-embed-popout" aria-label="Open this Space in a new tab">
-            <i data-lucide="external-link"></i>
-          </a>
+    <div class="hero-photo-wrap">
+      <svg class="constellation-svg" viewBox="0 0 300 300" aria-hidden="true">
+        <g class="constellation-lines">
+          <line x1="45" y1="55" x2="150" y2="25"></line>
+          <line x1="150" y1="25" x2="252" y2="65"></line>
+          <line x1="45" y1="55" x2="55" y2="175"></line>
+          <line x1="252" y1="65" x2="245" y2="185"></line>
+          <line x1="55" y1="175" x2="150" y2="272"></line>
+          <line x1="245" y1="185" x2="150" y2="272"></line>
+          <line x1="55" y1="175" x2="245" y2="185"></line>
+        </g>
+        <g class="constellation-nodes">
+          <circle cx="45" cy="55" r="3"></circle>
+          <circle cx="150" cy="25" r="3"></circle>
+          <circle cx="252" cy="65" r="3"></circle>
+          <circle cx="55" cy="175" r="3"></circle>
+          <circle cx="245" cy="185" r="3"></circle>
+          <circle cx="150" cy="272" r="3"></circle>
+        </g>
+      </svg>
+      <div class="emblem-badge" id="tiltCard">
+        <div class="emblem-inner">
+          <div class="emblem-sheen"></div>
+          <span class="emblem-initials">MS</span>
+          <div class="emblem-shine"></div>
         </div>
-        <div class="ai-embed-frame-shell">
-          <div class="ai-embed-loading" id="aiEmbedLoading">
-            <span class="ai-embed-spinner"></span> Waking up the Space…
-          </div>
-          <iframe
-            id="hfSpaceFrame"
-            class="ai-embed-iframe"
-            src="https://gradio-templates-chatbot.hf.space"
-            title="Hugging Face Spaces AI Chat"
-            loading="lazy"
-            referrerpolicy="no-referrer">
-          </iframe>
-        </div>
-        <p class="ai-embed-note">
-          <i data-lucide="info"></i>
-          Free Hugging Face Spaces can take a few seconds to wake up if idle.
-          <a href="https://huggingface.co/spaces/gradio-templates/chatbot" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a>
-        </p>
+        <div class="photo-badge">🇩🇪 Germany-bound</div>
       </div>
     </div>
   </div>
@@ -176,12 +187,21 @@
       <div class="orbit-marker"><span class="marker-pulse"></span></div>
       <div class="orbit-main">
         <span class="orbit-tag">CURRENT</span>
-        <h3>HR & Operations Executive</h3>
-        <p class="orbit-org">Metro Hospitality · Remote (US-based)</p>
+        <h3>HR & Operations Coordinator</h3>
+        <p class="orbit-org">Metro Hospitality · Remote</p>
       </div>
       <span class="expand-icon"><i data-lucide="plus"></i></span>
       <div class="orbit-detail">
-        Leading HR coordination and day-to-day operations for a US-based hospitality management company — fully remote from Bangladesh. Responsibilities span employee onboarding, policy coordination, and cross-team operational support, balancing people processes with efficiency.
+        <ul>
+          <li>Coordinate day-to-day HR and operational support for US hospitality clients remotely</li>
+          <li>Monitor surveillance systems to ensure operational continuity and security compliance</li>
+          <li>Maintain incident logs, operational reports, and escalation records</li>
+          <li>Identify and escalate operational, technical, and security issues</li>
+          <li>Support the HR Manager in recruitment: resume screening, candidate shortlisting, interview scheduling, and coordination</li>
+          <li>Maintain HR databases and employee records</li>
+          <li>Prepare HR and operational reports for management</li>
+          <li>Ensure compliance with internal policies and confidentiality standards</li>
+        </ul>
       </div>
     </button>
 
@@ -190,11 +210,18 @@
       <div class="orbit-main">
         <span class="orbit-tag">PAST</span>
         <h3>Executive Recruiter</h3>
-        <p class="orbit-org">Steadfast International</p>
+        <p class="orbit-org">Steadfast International Services · Remote</p>
       </div>
       <span class="expand-icon"><i data-lucide="plus"></i></span>
       <div class="orbit-detail">
-        Managed full-cycle recruitment — sourcing, screening, interviewing, and closing candidates across multiple roles. Built a sharp, data-informed instinct for matching talent to business needs.
+        <ul>
+          <li>Managed end-to-end recruitment for diverse roles across IT, Engineering, Business, Healthcare, and Technical sectors</li>
+          <li>Posted jobs on multiple platforms, screened resumes, and coordinated candidate submissions to recruiters</li>
+          <li>Maintained accurate ATS records and databases; ensured data quality and timely updates</li>
+          <li>Scheduled interviews, coordinated candidate follow-ups, and assisted with onboarding documentation</li>
+          <li>Supported internal HR and recruitment reporting to ensure accuracy and compliance</li>
+          <li>Negotiated salaries and relocation terms; maintained professional communication with candidates via email and phone</li>
+        </ul>
       </div>
     </button>
 
@@ -203,11 +230,16 @@
       <div class="orbit-main">
         <span class="orbit-tag">INTERNSHIP</span>
         <h3>HR Intern</h3>
-        <p class="orbit-org">Patenga Footwear Private Limited</p>
+        <p class="orbit-org">Patenga Footwear Pvt. Ltd.</p>
       </div>
       <span class="expand-icon"><i data-lucide="plus"></i></span>
       <div class="orbit-detail">
-        First hands-on exposure to HR fundamentals — employee documentation, onboarding support, and daily operational coordination in a manufacturing environment.
+        <ul>
+          <li>Assisted in recruitment and worker onboarding processes</li>
+          <li>Organized employee files and HR documentation</li>
+          <li>Supported the HR team in disciplinary and conflict-resolution cases</li>
+          <li>Ensured compliance with company policies and labor regulations</li>
+        </ul>
       </div>
     </button>
   </div>
