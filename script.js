@@ -115,8 +115,13 @@ function initGalaxy() {
   }
   window.addEventListener('resize', resize);
 
-  let paused = document.hidden;
-  document.addEventListener('visibilitychange', () => { paused = document.hidden; });
+  let paused = document.hidden || document.documentElement.getAttribute('data-theme') === 'light';
+  document.addEventListener('visibilitychange', () => {
+    paused = document.hidden || document.documentElement.getAttribute('data-theme') === 'light';
+  });
+  window.addEventListener('themechange', () => {
+    paused = document.documentElement.getAttribute('data-theme') === 'light';
+  });
 
   function animate() {
     requestAnimationFrame(animate);
@@ -445,19 +450,31 @@ function initEmailCopy() {
 }
 
 /* =========================================================
-   11. HUGGING FACE SPACES AI EMBED — hides the loading indicator
-   once the iframe fires its load event, or after a safety timeout.
-   Free-tier Spaces can go to sleep after inactivity and take a
-   few seconds to "wake up" on the first visit, so the timeout is
-   a bit longer than a typical page load.
+   11. 3D CURSOR TILT (hero emblem badge)
    ========================================================= */
-function initAiEmbed() {
-  const iframe = document.getElementById('hfSpaceFrame');
-  const loading = document.getElementById('aiEmbedLoading');
-  if (!iframe || !loading) return;
-  const hideLoading = () => { loading.style.opacity = '0'; setTimeout(() => { loading.style.display = 'none'; }, 300); };
-  iframe.addEventListener('load', hideLoading);
-  setTimeout(hideLoading, 8000); // Spaces cold-start can take longer than a normal page load
+function initTiltCard() {
+  const tiltCard = document.getElementById('tiltCard');
+  if (!tiltCard || reduceMotion || !hasHover) return;
+  const wrap = tiltCard.closest('.hero-photo-wrap');
+  let ticking = false, lastEvent = null;
+
+  wrap.addEventListener('mousemove', (e) => {
+    lastEvent = e;
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const rect = tiltCard.getBoundingClientRect();
+      const x = (lastEvent.clientX - rect.left) / rect.width;
+      const y = (lastEvent.clientY - rect.top) / rect.height;
+      const rotateY = (x - 0.5) * 24;
+      const rotateX = (0.5 - y) * 24;
+      tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      tiltCard.style.setProperty('--mx', `${x * 100}%`);
+      tiltCard.style.setProperty('--my', `${y * 100}%`);
+      ticking = false;
+    });
+  }, { passive: true });
+  wrap.addEventListener('mouseleave', () => { tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
 }
 
 /* =========================================================
@@ -497,6 +514,36 @@ function initMagneticButtons() {
 /* =========================================================
    14. AMBIENT SOUND TOGGLE
    ========================================================= */
+/* =========================================================
+   14B. LIGHT / DARK THEME TOGGLE
+   The initial theme is already set by the inline script in
+   <head> (before paint, to avoid a flash). This just handles
+   the button click, persistence, and icon swap.
+   ========================================================= */
+function initThemeToggle() {
+  const toggle = document.getElementById('themeToggle');
+  const icon = document.getElementById('themeIcon');
+  if (!toggle) return;
+
+  function applyIcon(theme) {
+    if (icon && typeof lucide !== 'undefined') {
+      icon.setAttribute('data-lucide', theme === 'light' ? 'sun' : 'moon');
+      lucide.createIcons();
+    }
+  }
+  applyIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    applyIcon(next);
+    // Let other modules (like the galaxy background) react to the change
+    window.dispatchEvent(new Event('themechange'));
+  });
+}
+
 function initAmbientSound() {
   const toggle = document.getElementById('soundToggle');
   const icon = document.getElementById('soundIcon');
@@ -727,9 +774,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initNavScrollSpy();
   initEmailCopy();
-  initAiEmbed();
+  initTiltCard();
   initSpotlight();
   initMagneticButtons();
+  initThemeToggle();
   initAmbientSound();
   initModals();
 });
